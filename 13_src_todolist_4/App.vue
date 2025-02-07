@@ -35,11 +35,6 @@ export default {
       const todo = this.todos.find(todoObj => todoObj.id === id)
       todo.completed = !todo.completed
     },
-    updateTodo(id, title) {
-      this.todos.forEach((todoObj) => {
-        if (todoObj.id === id) todoObj.title = title
-      })
-    },
     deleteTodo(id) {
       this.todos = this.todos.filter(todoObj => todoObj.id !== id)
     },
@@ -61,12 +56,10 @@ export default {
   mounted() {
     this.$bus.$on('checkTodo', this.checkTodo)
     this.$bus.$on('deleteTodo', this.deleteTodo)
-    this.$bus.$on('updateTodo', this.updateTodo)
   },
   beforeDestroy() {
     this.$bus.$off('checkTodo')
     this.$bus.$off('deleteTodo')
-    this.$bus.$off('updateTodo')
   }
 }
 </script>
@@ -99,18 +92,6 @@ body {
 .btn-danger:hover {
   color: #fff;
   background-color: #bd362f;
-}
-
-.btn-edit {
-  color: #fff;
-  background-color: skyblue;
-  border: 1px solid rgb(103, 159, 180);
-  margin-right: 5px;
-}
-
-.btn-edit:hover {
-  color: #fff;
-  background-color: dodgerblue;
 }
 
 .btn:focus {

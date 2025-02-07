@@ -2,9 +2,9 @@
   <div id="root">
     <div class="todo-container">
       <div class="todo-wrap">
-        <TheHeader @addTodo="addTodo"></TheHeader>
-        <TheList :todos="todos"></TheList>
-        <TheFooter :todos="todos" @checkAllTodo="checkAllTodo" @clearAllTodo="clearAllTodo"></TheFooter>
+        <TheHeader :addTodo="addTodo"></TheHeader>
+        <TheList :todos="todos" :checkTodo="checkTodo" :deleteTodo="deleteTodo"></TheList>
+        <TheFooter :todos="todos" :checkAllTodo="checkAllTodo" :clearAllTodo="clearAllTodo"></TheFooter>
       </div>
     </div>
   </div>
@@ -24,7 +24,11 @@ export default {
   },
   data() {
     return {
-      todos: JSON.parse(localStorage.getItem('todos')) || []
+      todos: [
+        {id: '001', title: 't001', completed: true},
+        {id: '002', title: 't002', completed: false},
+        {id: '003', title: 't003', completed: true}
+      ]
     }
   },
   methods: {
@@ -35,11 +39,6 @@ export default {
       const todo = this.todos.find(todoObj => todoObj.id === id)
       todo.completed = !todo.completed
     },
-    updateTodo(id, title) {
-      this.todos.forEach((todoObj) => {
-        if (todoObj.id === id) todoObj.title = title
-      })
-    },
     deleteTodo(id) {
       this.todos = this.todos.filter(todoObj => todoObj.id !== id)
     },
@@ -49,24 +48,6 @@ export default {
     clearAllTodo() {
       this.todos = this.todos.filter(todoObj => !todoObj.completed)
     }
-  },
-  watch: {
-    todos: {
-      deep: true,
-      handler(newVal) {
-        localStorage.setItem('todos', JSON.stringify(newVal))
-      }
-    }
-  },
-  mounted() {
-    this.$bus.$on('checkTodo', this.checkTodo)
-    this.$bus.$on('deleteTodo', this.deleteTodo)
-    this.$bus.$on('updateTodo', this.updateTodo)
-  },
-  beforeDestroy() {
-    this.$bus.$off('checkTodo')
-    this.$bus.$off('deleteTodo')
-    this.$bus.$off('updateTodo')
   }
 }
 </script>
@@ -99,18 +80,6 @@ body {
 .btn-danger:hover {
   color: #fff;
   background-color: #bd362f;
-}
-
-.btn-edit {
-  color: #fff;
-  background-color: skyblue;
-  border: 1px solid rgb(103, 159, 180);
-  margin-right: 5px;
-}
-
-.btn-edit:hover {
-  color: #fff;
-  background-color: dodgerblue;
 }
 
 .btn:focus {
