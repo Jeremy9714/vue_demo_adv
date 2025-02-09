@@ -8,6 +8,9 @@ import Message from '@/views/Message'
 
 //创建并默认暴露一个路由器
 const router = new VueRouter({
+    // '#'及其后面的内容就是hash值
+    // hash值不会包含在 HTTP 请求中，即：hash值不会带给服务器
+    mode: 'history', // 默认hash模式
     routes: [
         {
             // 命名路由
