@@ -30,6 +30,8 @@ export default {
         this.$set(todo, 'isEdit', true)
         // console.log(todo)
       }
+      // 方法未执行完，数据变更，vue也不会立刻重新解析模板 
+      // $nextTick确保 dom节点更新完毕后执行回调函数
       this.$nextTick(function () {
         this.$refs.inputTitle.focus()
       })
